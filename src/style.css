@@ -1,0 +1,264 @@
+/* =====================================================
+   Base page
+===================================================== */
+
+html,
+body,
+#cesiumContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+body {
+  font-family:
+    "Microsoft YaHei",
+    "PingFang SC",
+    Arial,
+    sans-serif;
+}
+
+
+/* =====================================================
+   Project panel
+===================================================== */
+
+#projectPanel {
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  width: 310px;
+
+  padding: 20px;
+
+  background:
+    rgba(18, 28, 38, 0.90);
+
+  color: white;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.35);
+
+  z-index: 1000;
+}
+
+
+#projectPanel h1 {
+  margin: 0;
+
+  font-size: 21px;
+
+  font-weight: 600;
+}
+
+
+#projectPanel h2 {
+  margin:
+    6px 0 14px 0;
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  opacity: 0.75;
+}
+
+
+#projectPanel h3 {
+  margin:
+    8px 0 14px 0;
+
+  font-size: 16px;
+}
+
+
+.description {
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  opacity: 0.85;
+}
+
+
+/* =====================================================
+   Divider
+===================================================== */
+
+.divider {
+  width: 100%;
+
+  height: 1px;
+
+  background:
+    rgba(255, 255, 255, 0.20);
+
+  margin:
+    16px 0;
+}
+
+
+/* =====================================================
+   Legend
+===================================================== */
+
+.legend-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin:
+    10px 0;
+
+  font-size: 13px;
+}
+
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+
+  border-radius: 3px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.65);
+}
+
+
+.strong-gain {
+  background:
+    rgb(0, 100, 0);
+}
+
+
+.moderate-gain {
+  background:
+    rgb(50, 205, 50);
+}
+
+
+.biomass-loss {
+  background:
+    rgb(220, 40, 40);
+}
+
+
+.legend-line {
+  width: 24px;
+
+  height: 0;
+
+  display: inline-block;
+}
+
+
+.stand-line {
+  border-top:
+    3px solid black;
+}
+
+
+.study-line {
+  border-top:
+    4px solid cyan;
+}
+
+
+.boundary-item {
+  margin-top: 16px;
+}
+
+
+/* =====================================================
+   Stand information panel
+===================================================== */
+
+#standInfoPanel {
+
+  position: absolute;
+
+  top: 90px;
+  right: 20px;
+
+  width: 270px;
+
+  padding: 18px;
+
+  background:
+    rgba(18, 28, 38, 0.92);
+
+  color: white;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.35);
+
+  z-index: 1000;
+}
+
+
+#standInfoPanel h3 {
+  margin:
+    0 0 16px 0;
+
+  font-size: 17px;
+}
+
+
+#infoHint {
+  margin: 0;
+
+  font-size: 13px;
+
+  opacity: 0.7;
+
+  line-height: 1.6;
+}
+
+
+.info-row {
+
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  align-items: center;
+
+  margin:
+    11px 0;
+
+  font-size: 13px;
+}
+
+
+.info-row span {
+  opacity: 0.75;
+}
+
+
+.info-row strong {
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+.hidden {
+  display: none;
+}

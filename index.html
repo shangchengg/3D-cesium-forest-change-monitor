@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Mudge-Link 森林生物量变化监测平台</title>
+</head>
+
+<body>
+
+  <!-- Cesium map -->
+  <div id="cesiumContainer"></div>
+
+
+  <!-- Project information panel -->
+  <div id="projectPanel">
+
+    <h1>森林生物量变化监测平台</h1>
+
+    <h2>Mudge & Link Islands</h2>
+
+    <p class="description">
+      基于 2019–2024 年森林样地数据，
+      展示研究区地上生物量（AGB）的空间变化。
+    </p>
+
+
+    <div class="divider"></div>
+
+
+    <h3>生物量变化图例</h3>
+
+    <div class="legend-item">
+      <span class="legend-color strong-gain"></span>
+      <span>显著增长 &gt; 5 Mg/ha</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-color moderate-gain"></span>
+      <span>小幅增长 0–5 Mg/ha</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-color biomass-loss"></span>
+      <span>生物量下降 ≤ 0 Mg/ha</span>
+    </div>
+
+
+    <div class="legend-item boundary-item">
+      <span class="legend-line stand-line"></span>
+      <span>森林样地边界</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-line study-line"></span>
+      <span>研究区边界</span>
+    </div>
+
+  </div>
+
+
+  <!-- Stand information panel -->
+  <div id="standInfoPanel">
+
+    <h3>森林样地信息</h3>
+
+    <p id="infoHint">
+      点击地图中的森林样地查看详细信息
+    </p>
+
+    <div id="standDetails" class="hidden">
+
+      <div class="info-row">
+        <span>样地编号</span>
+        <strong id="standId">-</strong>
+      </div>
+
+      <div class="info-row">
+        <span>Feature ID</span>
+        <strong id="featureId">-</strong>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="info-row">
+        <span>2019 AGB</span>
+        <strong id="agb2019">-</strong>
+      </div>
+
+      <div class="info-row">
+        <span>2024 AGB</span>
+        <strong id="agb2024">-</strong>
+      </div>
+
+      <div class="info-row">
+        <span>AGB 变化</span>
+        <strong id="agbChange">-</strong>
+      </div>
+
+      <div class="info-row">
+        <span>变化类型</span>
+        <strong id="changeClass">-</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script
+    type="module"
+    src="/src/main.js"
+  ></script>
+
+</body>
+
+</html>
