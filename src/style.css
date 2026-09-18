@@ -61,7 +61,7 @@ body {
   position: absolute;
 
   left: 20px;
-  bottom: 25px;
+  bottom: 125px;
 
   width: 250px;
 
@@ -262,7 +262,7 @@ body {
 #standInfoPanel {
   position: absolute;
 
-  top: 20px;
+  top: 50px;
   right: 20px;
 
   width: 290px;
