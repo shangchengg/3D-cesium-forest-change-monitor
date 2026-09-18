@@ -18,23 +18,55 @@
   <div id="cesiumContainer"></div>
 
 
-  <!-- Project information panel -->
-  <div id="projectPanel">
+<!-- Project information panel -->
+<div id="projectPanel">
 
-    <h1>森林生物量变化监测平台</h1>
+  <h1>森林生物量变化监测平台</h1>
 
-    <h2>Mudge & Link Islands</h2>
+  <h2>Mudge & Link Islands</h2>
 
-    <p class="description">
-      基于 2019–2024 年森林样地数据，
-      展示研究区地上生物量（AGB）的空间变化。
-    </p>
+  <p class="description">
+    基于 2019–2024 年森林样地数据，
+    展示研究区地上生物量与土地覆盖变化。
+  </p>
+
+  <div class="divider"></div>
+
+  <h3>可视化模式</h3>
+
+  <div class="mode-switch">
+
+    <button
+      id="agbModeButton"
+      class="mode-button active"
+      type="button"
+    >
+      生物量变化
+    </button>
+
+    <button
+      id="transitionModeButton"
+      class="mode-button"
+      type="button"
+    >
+      土地覆盖变化
+    </button>
+
+  </div>
+
+</div>
+
+  <!-- legend building -->>
+
+<!-- Map legend -->
+<div id="legendPanel">
+
+  <h3 id="legendTitle">
+    生物量变化图例
+  </h3>
 
 
-    <div class="divider"></div>
-
-
-    <h3>生物量变化图例</h3>
+  <div id="agbLegend">
 
     <div class="legend-item">
       <span class="legend-color strong-gain"></span>
@@ -51,19 +83,51 @@
       <span>生物量下降 ≤ 0 Mg/ha</span>
     </div>
 
+  </div>
 
-    <div class="legend-item boundary-item">
-      <span class="legend-line stand-line"></span>
-      <span>森林样地边界</span>
+
+  <div
+    id="transitionLegend"
+    class="hidden"
+  >
+
+    <div class="legend-item">
+      <span class="legend-color stable-forest"></span>
+      <span>持续森林覆盖</span>
     </div>
 
     <div class="legend-item">
-      <span class="legend-line study-line"></span>
-      <span>研究区边界</span>
+      <span class="legend-color regeneration"></span>
+      <span>森林恢复</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-color disturbance"></span>
+      <span>森林扰动</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-color transition-other"></span>
+      <span>其他稳定覆盖</span>
     </div>
 
   </div>
 
+
+  <div class="divider"></div>
+
+
+  <div class="legend-item">
+    <span class="legend-line stand-line"></span>
+    <span>森林样地边界</span>
+  </div>
+
+  <div class="legend-item">
+    <span class="legend-line study-line"></span>
+    <span>研究区边界</span>
+  </div>
+
+</div>
 
   <!-- Stand information panel -->
   <div id="standInfoPanel">
@@ -107,7 +171,17 @@
         <span>变化类型</span>
         <strong id="changeClass">-</strong>
       </div>
+      <div class="divider"></div>
 
+      <div class="info-row">
+        <span>主导变化类型</span>
+        <strong id="transitionGroup">-</strong>
+      </div>
+
+      <div class="info-row">
+        <span>主导类型占比</span>
+        <strong id="transitionProp">-</strong>
+      </div>
     </div>
 
   </div>

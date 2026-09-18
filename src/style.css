@@ -36,6 +36,8 @@ body {
 
   padding: 20px;
 
+  box-sizing: border-box;
+
   background:
     rgba(18, 28, 38, 0.90);
 
@@ -51,43 +53,45 @@ body {
 }
 
 
-#projectPanel h1 {
-  margin: 0;
+/* =====================================================
+   Map Legend
+===================================================== */
 
-  font-size: 21px;
+#legendPanel {
+  position: absolute;
+
+  left: 20px;
+  bottom: 25px;
+
+  width: 250px;
+
+  padding:
+    16px 18px;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(18, 28, 38, 0.90);
+
+  color: white;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.35);
+
+  z-index: 1000;
+}
+
+
+#legendPanel h3 {
+  margin:
+    0 0 12px 0;
+
+  font-size: 15px;
 
   font-weight: 600;
-}
-
-
-#projectPanel h2 {
-  margin:
-    6px 0 14px 0;
-
-  font-size: 14px;
-
-  font-weight: 400;
-
-  opacity: 0.75;
-}
-
-
-#projectPanel h3 {
-  margin:
-    8px 0 14px 0;
-
-  font-size: 16px;
-}
-
-
-.description {
-  margin: 0;
-
-  font-size: 13px;
-
-  line-height: 1.7;
-
-  opacity: 0.85;
 }
 
 
@@ -111,6 +115,53 @@ body {
 /* =====================================================
    Legend
 ===================================================== */
+.mode-switch {
+  display: flex;
+
+  gap: 8px;
+
+  width: 100%;
+}
+
+
+.mode-button {
+  flex: 1;
+
+  padding:
+    9px 8px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.30);
+
+  border-radius: 5px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color: white;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+.mode-button:hover {
+  background:
+    rgba(255, 255, 255, 0.16);
+}
+
+
+.mode-button.active {
+  background:
+    rgba(45, 140, 210, 0.85);
+
+  border-color:
+    rgba(120, 200, 255, 0.90);
+}
 
 .legend-item {
   display: flex;
@@ -155,6 +206,28 @@ body {
     rgb(220, 40, 40);
 }
 
+.stable-forest {
+  background:
+    rgb(46, 139, 87);
+}
+
+
+.regeneration {
+  background:
+    rgb(32, 178, 170);
+}
+
+
+.disturbance {
+  background:
+    rgb(242, 142, 43);
+}
+
+
+.transition-other {
+  background:
+    rgb(128, 128, 128);
+}
 
 .legend-line {
   width: 24px;
@@ -187,15 +260,16 @@ body {
 ===================================================== */
 
 #standInfoPanel {
-
   position: absolute;
 
-  top: 90px;
+  top: 20px;
   right: 20px;
 
-  width: 270px;
+  width: 290px;
 
   padding: 18px;
+
+  box-sizing: border-box;
 
   background:
     rgba(18, 28, 38, 0.92);
@@ -209,14 +283,6 @@ body {
     rgba(0, 0, 0, 0.35);
 
   z-index: 1000;
-}
-
-
-#standInfoPanel h3 {
-  margin:
-    0 0 16px 0;
-
-  font-size: 17px;
 }
 
 

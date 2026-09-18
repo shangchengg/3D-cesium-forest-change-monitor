@@ -51,8 +51,14 @@ const forestStands = await GeoJsonDataSource.load(
 // Add GeoJSON to the viewer
 viewer.dataSources.add(forestStands);
 
-// Return the original AGB color of a stand
-function getStandColor(entity) {
+// Visualization mode
+let visualizationMode = "agb";
+// Highlight settings
+let selectedStand = null;
+let highlightLine = null;
+
+// Return AGB change color
+function getAgbColor(entity) {
 
   const agbChange =
     Number(
@@ -68,8 +74,58 @@ function getStandColor(entity) {
   if (agbChange > 0) {
     return Color.LIMEGREEN.withAlpha(0.55);
   }
-  else
+
   return Color.RED.withAlpha(0.65);
+}
+
+
+// Return land-cover transition color
+function getTransitionColor(entity) {
+
+  const rawGroup =
+    entity.properties.dom_group
+      ?.getValue(
+        viewer.clock.currentTime
+      );
+
+  const transitionGroup =
+    String(rawGroup ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "_");
+
+  if (transitionGroup === "stable_forest") {
+    return Color
+      .fromCssColorString("#2E8B57")
+      .withAlpha(0.60);
+  }
+
+  if (transitionGroup === "regeneration") {
+    return Color
+      .fromCssColorString("#20B2AA")
+      .withAlpha(0.60);
+  }
+
+  if (transitionGroup === "disturbance") {
+    return Color
+      .fromCssColorString("#F28E2B")
+      .withAlpha(0.65);
+  }
+
+  return Color
+    .fromCssColorString("#808080")
+    .withAlpha(0.55);
+}
+
+
+// Return color based on current visualization mode
+function getCurrentStandColor(entity) {
+
+  if (visualizationMode === "transition") {
+    return getTransitionColor(entity);
+  }
+
+  return getAgbColor(entity);
 }
 
 // Polygon styling
@@ -81,8 +137,131 @@ for (const entity of standEntities) {
   }
 
   entity.polygon.material =
-    getStandColor(entity);
+  getCurrentStandColor(entity);
 }
+
+// Update stand colors
+function updateStandStyles() {
+
+  for (const entity of standEntities) {
+
+    if (
+      !entity.polygon ||
+      !entity.properties
+    ) {
+      continue;
+    }
+
+    entity.polygon.material =
+      getCurrentStandColor(entity);
+  }
+
+
+  if (selectedStand) {
+
+    selectedStand.polygon.material =
+      Color.YELLOW.withAlpha(0.50);
+
+  }
+}
+
+// Visualization mode controls
+
+const agbModeButton =
+  document.getElementById(
+    "agbModeButton"
+  );
+
+const transitionModeButton =
+  document.getElementById(
+    "transitionModeButton"
+  );
+
+const agbLegend =
+  document.getElementById(
+    "agbLegend"
+  );
+
+const transitionLegend =
+  document.getElementById(
+    "transitionLegend"
+  );
+
+const legendTitle =
+  document.getElementById(
+    "legendTitle"
+  );
+
+
+// Switch to AGB mode
+agbModeButton.addEventListener(
+  "click",
+  () => {
+
+    visualizationMode = "agb";
+
+    agbModeButton
+      .classList.add(
+        "active"
+      );
+
+    transitionModeButton
+      .classList.remove(
+        "active"
+      );
+
+    agbLegend
+      .classList.remove(
+        "hidden"
+      );
+
+    transitionLegend
+      .classList.add(
+        "hidden"
+      );
+
+    legendTitle.textContent =
+      "生物量变化图例";
+
+    updateStandStyles();
+  }
+);
+
+
+// Switch to transition mode
+transitionModeButton.addEventListener(
+  "click",
+  () => {
+
+    visualizationMode =
+      "transition";
+
+    transitionModeButton
+      .classList.add(
+        "active"
+      );
+
+    agbModeButton
+      .classList.remove(
+        "active"
+      );
+
+    transitionLegend
+      .classList.remove(
+        "hidden"
+      );
+
+    agbLegend
+      .classList.add(
+        "hidden"
+      );
+
+    legendTitle.textContent =
+      "土地覆盖变化图例";
+
+    updateStandStyles();
+  }
+);
 
 // Load stand boundaries
 const standBoundary = await GeoJsonDataSource.load(
@@ -107,12 +286,6 @@ const studyAreaBoundary = await GeoJsonDataSource.load(
 );
 
 viewer.dataSources.add(studyAreaBoundary);
-
-// Highlight settings
-
-let selectedStand = null;
-let highlightLine = null;
-
 
 // Stand click interaction
 
@@ -144,8 +317,10 @@ clickHandler.setInputAction(
       if (selectedStand) {
 
         selectedStand.polygon.material =
-          getStandColor(selectedStand);
-
+          getCurrentStandColor(
+            selectedStand
+          );
+        
         selectedStand = null;
       }
 
@@ -193,7 +368,9 @@ clickHandler.setInputAction(
     ) {
 
       selectedStand.polygon.material =
-        getStandColor(selectedStand);
+        getCurrentStandColor(
+          selectedStand
+        );
     }
 
 
@@ -295,6 +472,65 @@ clickHandler.setInputAction(
           .getValue(time)
       );
 
+    const transitionGroupRaw =
+      properties.dom_group
+        ?.getValue(time);
+
+    const transitionProp =
+      Number(
+        properties.dom_prop
+          ?.getValue(time)
+      );
+
+    let transitionGroupDisplay;
+
+
+switch (
+  String(
+    transitionGroupRaw ?? ""
+  )
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_")
+) {
+
+  case "stable_forest":
+
+    transitionGroupDisplay =
+      "持续森林覆盖";
+
+    break;
+
+
+  case "regeneration":
+
+    transitionGroupDisplay =
+      "森林恢复";
+
+    break;
+
+
+  case "disturbance":
+
+    transitionGroupDisplay =
+      "森林扰动";
+
+    break;
+
+
+  case "other":
+
+    transitionGroupDisplay =
+      "其他稳定覆盖";
+
+    break;
+
+
+  default:
+
+    transitionGroupDisplay =
+      transitionGroupRaw ?? "-";
+}
 
     // Classify biomass change
 
@@ -324,6 +560,27 @@ clickHandler.setInputAction(
 
 
     // Update stand information panel
+    
+    document
+      .getElementById(
+        "transitionGroup"
+      )
+      .textContent =
+      transitionGroupDisplay;
+
+
+    document
+      .getElementById(
+        "transitionProp"
+      )
+      .textContent =
+      Number.isFinite(
+        transitionProp
+      )
+        ? `${(
+            transitionProp * 100
+          ).toFixed(1)}%`
+        : "-";
 
     document
       .getElementById("standId")
