@@ -282,7 +282,7 @@ body {
     0 4px 16px
     rgba(0, 0, 0, 0.35);
 
-  z-index: 1000;
+  z-index: 500;
 }
 
 
@@ -327,4 +327,14 @@ body {
 
 .hidden {
   display: none;
+}
+
+/* Keep Cesium navigation help above custom panels */
+
+.cesium-navigation-help {
+  z-index: 2000 !important;
+}
+
+.cesium-viewer-toolbar {
+  z-index: 2000 !important;
 }
