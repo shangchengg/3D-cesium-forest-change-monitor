@@ -14,9 +14,18 @@ import "./style.css";
 
 
 // Load Cesium ion access token
-Ion.defaultAccessToken =
+const cesiumToken =
   import.meta.env.VITE_CESIUM_ION_TOKEN;
 
+console.log(
+  "Cesium token loaded:",
+  Boolean(cesiumToken),
+  "length:",
+  cesiumToken?.length ?? 0
+);
+
+Ion.defaultAccessToken =
+  cesiumToken;
 
 // Create Cesium Viewer
 const viewer = new Viewer(
