@@ -26,6 +26,8 @@ const viewer = new Viewer(
 
     infoBox: false,
     selectionIndicator: false,
+
+    navigationHelpButton: false,
   }
 );
 
