@@ -338,3 +338,269 @@ body {
 .cesium-viewer-toolbar {
   z-index: 2000 !important;
 }
+
+/* =====================================================
+   Mobile responsive layout
+===================================================== */
+
+@media (max-width: 768px) {
+
+  /* Project panel */
+
+  #projectPanel {
+    top: 10px;
+    left: 10px;
+
+    width: 230px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+  }
+
+
+  #projectPanel h1 {
+    font-size: 16px;
+
+    line-height: 1.3;
+  }
+
+
+  #projectPanel h2 {
+    margin:
+      4px 0 8px 0;
+
+    font-size: 12px;
+  }
+
+
+  #projectPanel h3 {
+    margin:
+      6px 0 8px 0;
+
+    font-size: 13px;
+  }
+
+
+  .description {
+    display: none;
+  }
+
+
+  #projectPanel .divider {
+    margin:
+      10px 0;
+  }
+
+
+  /* Visualization mode controls */
+
+  .mode-switch {
+    gap: 5px;
+  }
+
+
+  .mode-button {
+    padding:
+      7px 4px;
+
+    font-size: 11px;
+  }
+
+
+  /* Map legend */
+
+  #legendPanel {
+    left: 10px;
+    bottom: 15px;
+
+    width: 185px;
+
+    padding:
+      10px 12px;
+
+    box-sizing: border-box;
+  }
+
+
+  #legendPanel h3 {
+    margin:
+      0 0 8px 0;
+
+    font-size: 13px;
+  }
+
+
+  #legendPanel .divider {
+    margin:
+      9px 0;
+  }
+
+
+  .legend-item {
+    gap: 7px;
+
+    margin:
+      6px 0;
+
+    font-size: 11px;
+  }
+
+
+  .legend-color {
+    width: 14px;
+    height: 14px;
+
+    flex-shrink: 0;
+  }
+
+
+  .legend-line {
+    width: 20px;
+
+    flex-shrink: 0;
+  }
+
+
+  /* Hide legend while stand information is open */
+
+  #legendPanel.mobile-hidden {
+    display: none;
+  }
+
+
+  /* Stand information panel */
+
+  #standInfoPanel {
+    display: none;
+
+    top: auto;
+    left: 10px;
+    right: 10px;
+    bottom: 15px;
+
+    width: auto;
+    max-height: 42vh;
+
+    padding: 14px 16px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+
+    z-index: 1100;
+  }
+
+
+  #standInfoPanel.mobile-active {
+    display: block;
+  }
+
+
+  #standInfoPanel h3 {
+    margin:
+      0 0 10px 0;
+
+    font-size: 15px;
+  }
+
+
+  #standInfoPanel .divider {
+    margin:
+      10px 0;
+  }
+
+
+  .info-row {
+    margin:
+      7px 0;
+
+    gap: 15px;
+
+    font-size: 12px;
+  }
+
+
+  .info-row span {
+    flex-shrink: 0;
+  }
+
+
+  .info-row strong {
+    font-size: 12px;
+
+    text-align: right;
+
+    word-break: break-word;
+  }
+
+
+  /* Hide unused Cesium bottom controls on mobile */
+
+  .cesium-viewer-animationContainer,
+  .cesium-viewer-timelineContainer {
+    display: none !important;
+  }
+
+
+  /* Keep Cesium navigation controls above custom panels */
+
+  .cesium-viewer-toolbar,
+  .cesium-navigation-help {
+    z-index: 2000 !important;
+  }
+
+}
+
+
+/* =====================================================
+   Small mobile screens
+===================================================== */
+
+@media (max-width: 480px) {
+
+  #projectPanel {
+    width: 210px;
+
+    padding: 10px;
+  }
+
+
+  #projectPanel h1 {
+    font-size: 14px;
+  }
+
+
+  #projectPanel h2 {
+    font-size: 11px;
+  }
+
+
+  #projectPanel h3 {
+    font-size: 12px;
+  }
+
+
+  .mode-button {
+    padding:
+      6px 3px;
+
+    font-size: 10px;
+  }
+
+
+  #legendPanel {
+    width: 170px;
+  }
+
+
+  #standInfoPanel {
+    max-height: 45vh;
+
+    padding:
+      12px 14px;
+  }
+
+}

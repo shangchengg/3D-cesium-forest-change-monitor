@@ -41,11 +41,15 @@ const viewer = new Viewer(
 
 
 // Fly to the study area between Mudge and Link Islands
+
+const isMobile =
+  window.innerWidth <= 768;
+
 viewer.camera.flyTo({
   destination: Cartesian3.fromDegrees(
-    -123.7950,
-    49.1239,
-    6000
+    isMobile ? -123.7860 : -123.7950,
+    isMobile ? 49.1190 : 49.1239,
+    isMobile ? 7000 : 6000
   ),
   duration: 3,
 });
@@ -297,6 +301,52 @@ const studyAreaBoundary = await GeoJsonDataSource.load(
 
 viewer.dataSources.add(studyAreaBoundary);
 
+// Mobile panel state
+function updateMobilePanelState(
+  standSelected
+) {
+
+  const legendPanel =
+    document.getElementById(
+      "legendPanel"
+    );
+
+  const standInfoPanel =
+    document.getElementById(
+      "standInfoPanel"
+    );
+
+
+  if (standSelected) {
+
+    legendPanel
+      ?.classList.add(
+        "mobile-hidden"
+      );
+
+    standInfoPanel
+      ?.classList.add(
+        "mobile-active"
+      );
+
+  }
+
+  else {
+
+    legendPanel
+      ?.classList.remove(
+        "mobile-hidden"
+      );
+
+    standInfoPanel
+      ?.classList.remove(
+        "mobile-active"
+      );
+
+  }
+}
+
+
 // Stand click interaction
 
 const clickHandler = new ScreenSpaceEventHandler(
@@ -343,6 +393,8 @@ clickHandler.setInputAction(
 
         highlightLine = null;
       }
+
+      updateMobilePanelState(false);
 
       return;
     }
@@ -641,7 +693,8 @@ switch (
       .classList.remove(
         "hidden"
       );
-
+      
+    updateMobilePanelState(true);
   },
 
   ScreenSpaceEventType.LEFT_CLICK
