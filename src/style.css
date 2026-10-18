@@ -604,3 +604,361 @@ body {
   }
 
 }
+
+
+/* =========================================
+   GeoSpatial AI Chat Panel
+   ========================================= */
+
+#aiChatPanel {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 360px;
+  max-width: calc(100vw - 40px);
+  z-index: 1000;
+
+  background: rgba(14, 24, 35, 0.96);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.ai-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ai-chat-header strong {
+  font-size: 14px;
+}
+
+#aiToggleButton {
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#aiChatBody {
+  padding: 12px;
+}
+
+#aiChatBody[hidden] {
+  display: none;
+}
+
+#aiAnswer {
+  max-height: 260px;
+  min-height: 75px;
+  overflow-y: auto;
+
+  padding: 10px;
+  margin-bottom: 12px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#aiQuestion {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+
+  padding: 10px;
+  border: 1px solid #64748b;
+  border-radius: 7px;
+
+  background: #192838;
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.ai-chat-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ai-chat-actions button {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#aiAskButton {
+  background: #0891b2;
+  color: white;
+}
+
+#aiAskButton:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+#aiClearButton {
+  background: #334155;
+  color: white;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  #aiChatPanel {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: none;
+  }
+
+  #aiAnswer {
+    max-height: 170px;
+  }
+}
+
+
+/* =========================================
+   AI Chat Panel - Desktop Layout
+   ========================================= */
+
+#aiChatPanel {
+  left: auto;
+  right: 20px;
+  bottom: 20px;
+
+  width: 400px;
+  max-width: calc(100vw - 40px);
+
+  background: rgba(18, 28, 38, 0.96);
+  border: 1px solid rgba(100, 200, 235, 0.35);
+  border-radius: 12px;
+
+  font-family: "Microsoft YaHei", "PingFang SC",
+               Arial, sans-serif;
+}
+
+.ai-chat-header {
+  padding: 14px 16px;
+  background: rgba(35, 65, 85, 0.85);
+}
+
+.ai-chat-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-chat-title strong {
+  font-size: 16px;
+}
+
+.ai-chat-title small {
+  font-size: 11px;
+  color: #b9d7e5;
+}
+
+#aiChatBody {
+  padding: 14px;
+}
+
+#aiAnswer {
+  max-height: 340px;
+  min-height: 80px;
+
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.75;
+
+  white-space: normal;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+#aiAnswer h1,
+#aiAnswer h2,
+#aiAnswer h3 {
+  font-size: 14px;
+  margin: 14px 0 8px;
+  color: #e0f2fe;
+}
+
+#aiAnswer p {
+  margin: 8px 0;
+}
+
+#aiAnswer ul,
+#aiAnswer ol {
+  padding-left: 22px;
+}
+
+#aiAnswer table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 12px 0;
+}
+
+#aiAnswer th,
+#aiAnswer td {
+  border: 1px solid #526779;
+  padding: 7px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#aiAnswer th {
+  background: rgba(55, 90, 110, 0.7);
+}
+
+#aiAnswer strong {
+  color: #f9dc91;
+}
+
+.ai-map-status {
+  margin-top: 12px;
+  padding: 9px;
+  background: rgba(255, 176, 0, 0.12);
+  border-left: 3px solid #ffb000;
+  white-space: pre-wrap;
+  font-size: 12px;
+}
+
+#aiQuestion {
+  min-height: 64px;
+  line-height: 1.5;
+  font-family: inherit;
+}
+
+#aiAskButton {
+  background: #187fa8;
+}
+
+#aiAskButton:hover:not(:disabled) {
+  background: #2399c5;
+}
+
+#aiClearButton:hover {
+  background: #475569;
+}
+
+
+/* =========================================
+   Mobile Layout
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  #aiChatPanel {
+    left: auto;
+    right: 10px;
+    bottom: 10px;
+
+    width: min(340px, calc(100vw - 20px));
+    max-width: calc(100vw - 20px);
+
+    z-index: 1200;
+  }
+
+  #aiChatPanel.ai-collapsed {
+    width: 200px;
+  }
+
+  #aiChatPanel.ai-collapsed .ai-chat-header {
+    padding: 11px 12px;
+  }
+
+  #aiChatPanel.ai-collapsed .ai-chat-title small {
+    display: none;
+  }
+
+  #aiChatBody {
+    padding: 10px;
+  }
+
+  #aiAnswer {
+    max-height: 30dvh;
+    min-height: 65px;
+    font-size: 12px;
+  }
+
+  #aiQuestion {
+    min-height: 50px;
+    font-size: 16px;
+  }
+
+  #aiChatPanel.ai-open {
+    max-height: 65dvh;
+  }
+
+  #aiChatPanel.ai-open #aiChatBody {
+    overflow-y: auto;
+    max-height: calc(65dvh - 60px);
+  }
+}
+
+@media (max-width: 480px) {
+  #aiChatPanel.ai-collapsed {
+    width: 185px;
+  }
+
+  #aiChatPanel.ai-collapsed .ai-chat-title strong {
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================
+   AI Chat Panel - Center Position
+   ========================================= */
+
+/* Desktop: bottom center */
+@media (min-width: 769px) {
+  #aiChatPanel {
+    position: fixed;
+
+    left: 50%;
+    right: auto;
+    bottom: 20px;
+    top: auto;
+
+    transform: translateX(-50%);
+
+    width: 420px;
+    max-width: calc(100vw - 40px);
+
+    z-index: 1200;
+  }
+}
+
+/* Mobile: keep bottom-right layout */
+@media (max-width: 768px) {
+  #aiChatPanel {
+    position: fixed;
+
+    left: auto;
+    right: 10px;
+    bottom: 10px;
+    top: auto;
+
+    transform: none;
+  }
+}

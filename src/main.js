@@ -11,7 +11,8 @@ import {
 
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import "./style.css";
-
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 // Load Cesium ion access token
 const cesiumToken =
@@ -700,3 +701,309 @@ switch (
   ScreenSpaceEventType.LEFT_CLICK
 
 );
+
+
+/* =========================================
+   GeoSpatial AI Agent Integration
+   ========================================= */
+
+// Local FastAPI backend
+const AI_API_URL =
+  import.meta.env.VITE_AGENT_API_URL ||
+  "http://127.0.0.1:8000";
+
+// Store AI highlight entities separately
+let aiHighlightEntities = [];
+
+// Build lookup: FEATURE_ID -> Cesium Entity
+const featureEntityMap = new Map();
+
+for (const entity of standEntities) {
+  const id = entity.properties?.FEATURE_ID?.getValue(
+    viewer.clock.currentTime
+  );
+
+  if (id !== undefined && id !== null) {
+    featureEntityMap.set(String(id), entity);
+  }
+}
+
+console.log(
+  "AI: indexed forest stands:",
+  featureEntityMap.size
+);
+
+
+// Clear previous AI highlights
+function clearAIHighlights() {
+  for (const entity of aiHighlightEntities) {
+    viewer.entities.remove(entity);
+  }
+
+  aiHighlightEntities = [];
+}
+
+
+// Highlight stands returned by FastAPI
+
+async function highlightAIStands(featureIds) {
+  clearAIHighlights();
+
+  const matched = [];
+  const missing = [];
+
+  for (const id of featureIds) {
+    const entity = featureEntityMap.get(String(id));
+
+    if (!entity?.polygon) {
+      missing.push(id);
+      continue;
+    }
+
+    const hierarchy = entity.polygon.hierarchy?.getValue(
+      viewer.clock.currentTime
+    );
+
+    if (!hierarchy?.positions?.length) {
+      missing.push(id);
+      continue;
+    }
+
+    // Highlight polygon with orange-yellow fill
+    const highlightPolygon = viewer.entities.add({
+      name: `AI 匹配样地 ${id}`,
+      polygon: {
+        hierarchy: hierarchy,
+        material: Color.fromCssColorString(
+          "#FFB000"
+        ).withAlpha(0.60),
+      },
+    });
+
+    aiHighlightEntities.push(highlightPolygon);
+
+    const positions = [
+      ...hierarchy.positions,
+      hierarchy.positions[0],
+    ];
+
+    // Dark outline for contrast
+    const darkOutline = viewer.entities.add({
+      polyline: {
+        positions,
+        width: 10,
+        material: Color.BLACK,
+        clampToGround: true,
+      },
+    });
+
+    // Bright outline
+    const brightOutline = viewer.entities.add({
+      polyline: {
+        positions,
+        width: 6,
+        material: Color.fromCssColorString("#FFD600"),
+        clampToGround: true,
+      },
+    });
+
+    aiHighlightEntities.push(darkOutline, brightOutline);
+    matched.push(entity);
+  }
+
+  if (matched.length > 0) {
+    await viewer.flyTo(matched, {
+      duration: 1.8,
+    });
+  }
+
+  return {
+    matched: matched.length,
+    missing,
+  };
+}
+
+
+
+// Create AI chat interface
+const aiPanel = document.createElement("section");
+aiPanel.id = "aiChatPanel";
+
+
+aiPanel.innerHTML = `
+  <div class="ai-chat-header">
+    <div class="ai-chat-title">
+      <strong>地理空间 AI 助手</strong>
+      <small>森林生物量 · 土地覆盖变化</small>
+    </div>
+
+    <button
+      id="aiToggleButton"
+      type="button"
+      aria-label="展开或收起 AI 助手"
+      aria-expanded="true"
+    >−</button>
+  </div>
+
+  <div id="aiChatBody">
+    <div id="aiAnswer" role="status" aria-live="polite">
+      你好！你可以向我询问森林生物量变化、
+      土地覆盖转换或研究报告中的内容。
+    </div>
+
+    <form id="aiChatForm">
+      <textarea
+        id="aiQuestion"
+        rows="2"
+        placeholder="例如：哪些样地的生物量下降了？"
+        aria-label="输入 AI 问题"
+        required
+      ></textarea>
+
+      <div class="ai-chat-actions">
+        <button type="submit" id="aiAskButton">
+          发送问题
+        </button>
+
+        <button type="button" id="aiClearButton">
+          清除结果
+        </button>
+      </div>
+    </form>
+  </div>
+`;
+
+
+document.body.appendChild(aiPanel);
+
+
+// UI references
+const aiForm = document.getElementById("aiChatForm");
+const aiQuestion = document.getElementById("aiQuestion");
+const aiAnswer = document.getElementById("aiAnswer");
+const aiAskButton = document.getElementById("aiAskButton");
+const aiClearButton = document.getElementById("aiClearButton");
+const aiToggleButton = document.getElementById("aiToggleButton");
+const aiChatBody = document.getElementById("aiChatBody");
+
+
+// Submit question to FastAPI
+aiForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const question = aiQuestion.value.trim();
+  if (!question) return;
+
+  aiAskButton.disabled = true;
+  aiAskButton.textContent = "正在分析...";
+  aiAnswer.textContent = "正在检索研究资料并分析空间数据，请稍候...";
+
+  try {
+    const response = await fetch(`${AI_API_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+  function renderAIAnswer(markdown) {
+    const html = marked.parse(markdown, {
+      gfm: true,
+      breaks: true,
+    });
+
+    aiAnswer.innerHTML = DOMPurify.sanitize(html);
+  }
+
+    // Display model answer as plain text.
+    // Avoid injecting LLM-generated HTML.
+    renderAIAnswer(
+      typeof data.answer === "string"
+        ? data.answer
+        : "模型未返回回答。"
+    );
+
+    const ids = Array.isArray(data.feature_ids)
+      ? data.feature_ids
+      : [];
+
+    const highlightResult = await highlightAIStands(ids);
+
+    const statusMessages = [];
+
+    if (ids.length > 0) {
+      statusMessages.push(
+        `地图：已高亮 ${highlightResult.matched} 个森林样地。`
+      );
+    }
+
+    if (highlightResult.missing.length > 0) {
+      statusMessages.push(
+        `未匹配的 FEATURE_ID：${highlightResult.missing.join(", ")}`
+      );
+    }
+
+    if (statusMessages.length > 0) {
+      const status = document.createElement("p");
+      status.className = "ai-map-status";
+      status.textContent = statusMessages.join("\n");
+      aiAnswer.appendChild(status);
+    }
+
+  } catch (error) {
+    console.error("AI Agent request failed:", error);
+
+    aiAnswer.textContent =
+      `AI 请求失败: ${error.message}\n` +
+      "请检查 FastAPI 服务和浏览器控制台。";
+  } finally {
+    aiAskButton.disabled = false;
+    aiAskButton.textContent = "发送问题";
+  }
+});
+
+
+// Clear AI answer and map highlights
+aiClearButton.addEventListener("click", () => {
+  clearAIHighlights();
+  aiAnswer.textContent = "已清除 AI 分析结果和地图高亮。";
+  aiQuestion.value = "";
+});
+
+
+// Collapse or expand chat panel
+
+function setAIChatOpen(open) {
+  aiChatBody.hidden = !open;
+
+  aiPanel.classList.toggle("ai-open", open);
+  aiPanel.classList.toggle("ai-collapsed", !open);
+
+  aiToggleButton.textContent = open ? "−" : "+";
+  aiToggleButton.setAttribute(
+    "aria-expanded",
+    String(open)
+  );
+
+  // On mobile, prevent the stand information
+  // panel from covering the AI chat.
+  if (open && window.innerWidth <= 768) {
+    updateMobilePanelState(false);
+  }
+}
+
+aiToggleButton.addEventListener("click", () => {
+  setAIChatOpen(aiChatBody.hidden);
+});
+
+// Mobile: start collapsed.
+// Desktop: start expanded.
+setAIChatOpen(window.innerWidth > 768);
+
