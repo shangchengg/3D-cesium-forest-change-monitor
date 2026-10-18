@@ -695,6 +695,10 @@ switch (
         "hidden"
       );
       
+  if (window.innerWidth <= 768) {
+    setAIChatOpen(false);
+  }
+
     updateMobilePanelState(true);
   },
 
